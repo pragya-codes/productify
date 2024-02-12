@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 function App() {
 	return (
 		<>
@@ -22,9 +24,24 @@ function Navbar() {
 }
 
 function Pomodoro() {
+	const ms = 25;
+	const [sec, setSec] = useState(0);
+	const [min, setMin] = useState(ms);
+	function handleClick() {
+		const id = setInterval(() => {}, ms);
+	}
 	return (
 		<>
-			<div className="container">POMODORO</div>
+			<div className="container flex flex-col p-10">
+				<div className="text-center px-12 py-2 text-2xl font-bold">
+					{min}:{sec}
+				</div>
+				<div className="text-center">
+					<button className="px-12 py-2" onClick={handleClick}>
+						START
+					</button>
+				</div>
+			</div>
 		</>
 	);
 }
