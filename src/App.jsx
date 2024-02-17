@@ -1,11 +1,21 @@
 import { useState, useEffect } from 'react';
 
 function App() {
+	const [theme, setTheme] = useState(false);
+	console.log(theme);
 	return (
-		<>
+		<main
+			className={
+				theme
+					? 'bg-black h-screen text-gray-200'
+					: 'bg-lime-400 h-screen '
+			}
+		>
 			<Navbar />
 			<Pomodoro />
-		</>
+			<Menu theme={theme} setTheme={setTheme} />
+			<Footer />
+		</main>
 	);
 }
 
@@ -13,9 +23,7 @@ function Navbar() {
 	return (
 		<nav className="container p-2 place-items-center grid grid-rows-2 grid-cols-2 sm:flex justify-between">
 			<h1 className="font-bold col-span-2 my-3">productify</h1>
-			{/* <i class="fa-regular fa-sun"></i>
-			<i class="fa-solid fa-moon"></i> */}
-			<p>T</p>
+
 			<p>P</p>
 			{/* <i className="fa-solid fa-user"></i>
 			<i className="fa-regular fa-user"></i> */}
@@ -92,20 +100,68 @@ benefit: 1. initial render
 	}
 	return (
 		<>
-			<div className="container flex flex-col p-10">
-				<div className="text-center px-12 py-2 text-2xl font-bold">
+			<div className="container mx-auto w-3/5 rounded-xl flex flex-col my-10 p-10 bg-lime-600  dark:bg-black">
+				<div className="text-center px-12 py-2 text-4xl font-bold">
 					{min}:{sec <= 9 ? `0${sec}` : sec}
 				</div>
-				<div className="text-center">
-					<button className="px-12 py-2" onClick={handleClick}>
+				<div className=" flex flex-col gap-2 justify-center p-3 pt-8 font-semibold sm:flex-row">
+					<button
+						className="px-16 py-2 border rounded-md border-black hover:bg-lime-700"
+						onClick={handleClick}
+					>
 						{isActive ? `STOP` : `START`}
 					</button>
 
-					<button className="px-12 py-2" onClick={handleReset}>
+					<button
+						className="px-16 py-2 border rounded-md border-black hover:bg-lime-700"
+						onClick={handleReset}
+					>
 						RESET
 					</button>
 				</div>
 			</div>
+		</>
+	);
+}
+
+function Menu({ theme, setTheme }) {
+	return (
+		<>
+			<section className="container w-1/3 text-center space-x-12">
+				<i className="fa-solid fa-list fa-lg"></i>
+
+				<i
+					className={
+						theme
+							? 'fa-regular fa-sun fa-lg'
+							: 'fa-solid fa-moon fa-lg'
+					}
+					onClick={() => setTheme(!theme)}
+				></i>
+
+				<i className="fa-solid fa-chart-line fa-lg"></i>
+			</section>
+		</>
+	);
+}
+
+function Footer() {
+	const [quotes, setQuotes] = useState('');
+	const url =
+		'https://api.quotable.io/quotes/random?tags=inspirational|motivational&maxLength=50';
+	async function quote(url) {
+		const response = await fetch(url);
+		const data = await response.json();
+		console.log(data);
+		setQuotes(data[0].content);
+	}
+	useEffect(() => {
+		quote(url);
+	}, []);
+
+	return (
+		<>
+			<p className="container text-sm text-center pt-10">{quotes}</p>
 		</>
 	);
 }
